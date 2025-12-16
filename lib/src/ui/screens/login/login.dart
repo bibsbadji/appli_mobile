@@ -1,6 +1,5 @@
-import 'package:cours1/src/ui/screens/home/home.dart';
 import 'package:cours1/src/utiles/my_assets/images_assets.dart';
-// Importez la page d'accueil
+import 'package:cours1/src/ui/screens/home/home.dart'; // Importations de la page d'accueil
 import 'package:flutter/material.dart';
 import 'package:cours1/src/ui/widgets/forms/text_input/text_input.dart';
 import 'package:cours1/src/ui/widgets/forms/app_button/app_button.dart';
@@ -29,7 +28,7 @@ class _LoginState extends State<Login> {
   void _login() {
     if (_formKey.currentState!.validate()) {
       String email = _emailController.text.trim();
-      String password = _passwordController.text.trim();
+      String _ = _passwordController.text.trim();
 
       // TODO: Vérifier les identifiants (API, Firebase, etc.)
       
