@@ -1,9 +1,7 @@
-import 'package:cours1/src/ui/routes/route_path.dart';
-import 'package:cours1/src/ui/screens/cart_page.dart';
-import 'package:cours1/src/utiles/my_assets/images_assets.dart';
 import 'package:flutter/material.dart';
-import '../ui/screens/cart_page.dart';
-import '../widgets/forms/product_card/product_card.dart';
+import 'package:cours1/src/utiles/my_assets/images_assets.dart';
+import 'package:cours1/src/ui/screens/supply/cart_page.dart';
+import '../../widgets/forms/product_card/product_card.dart';
 
 /// =====================
 /// MODELS (DANS LE MEME FICHIER)
@@ -25,7 +23,10 @@ class CartItem {
   final Product product;
   int quantity;
 
-  CartItem({required this.product, this.quantity = 1});
+  CartItem({
+    required this.product,
+    this.quantity = 1,
+  });
 }
 
 class CartData {
@@ -57,16 +58,28 @@ class Supply extends StatefulWidget {
 class _SupplyState extends State<Supply> {
   int _selectedIndex = 0;
 
+  /// Produits
   final List<Product> products = [
     Product(name: 'NESCOFFE', image: ImagesAssets.coffe, price: 200),
     Product(name: 'M&MS', image: ImagesAssets.mms, price: 200),
     Product(name: 'PRINGELS', image: ImagesAssets.pringels, price: 200),
     Product(name: 'CHOCOLATE', image: ImagesAssets.chocolate, price: 200),
     Product(name: 'OREO', image: ImagesAssets.oreo, price: 200),
-    Product(name: 'STRAWBERRY JUICE', image: ImagesAssets.strawberry, price: 200),
+    Product(
+        name: 'STRAWBERRY JUICE',
+        image: ImagesAssets.strawberry,
+        price: 200),
     Product(name: 'NUTELLA', image: ImagesAssets.nutella, price: 200),
     Product(name: 'FANTA', image: ImagesAssets.fanta, price: 200),
   ];
+
+  /// Nombre total d’articles dans le panier (badge)
+  int get cartItemCount {
+    return CartData.items.fold(
+      0,
+          (sum, item) => sum + item.quantity,
+    );
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -77,7 +90,9 @@ class _SupplyState extends State<Supply> {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (_) => const CartPage()),
-      );
+      ).then((_) {
+        setState(() {}); // rafraîchir le badge au retour
+      });
     }
   }
 
@@ -85,22 +100,58 @@ class _SupplyState extends State<Supply> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-
       appBar: AppBar(
         title: const Text('Supply', style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.white,
         elevation: 0,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.shopping_cart_outlined),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const CartPage()),
-              );
-            },
+          /// PANIER + BADGE
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.shopping_cart_outlined),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const CartPage()),
+                  ).then((_) {
+                    setState(() {});
+                  });
+                },
+              ),
+
+              if (cartItemCount > 0)
+                Positioned(
+                  right: 6,
+                  top: 6,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    constraints: const BoxConstraints(
+                      minWidth: 18,
+                      minHeight: 18,
+                    ),
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      cartItemCount.toString(),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
           ),
-          IconButton(icon: const Icon(Icons.person_outline), onPressed: () {}),
+
+          IconButton(
+            icon: const Icon(Icons.person_outline),
+            onPressed: () {},
+          ),
         ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(2),
@@ -131,12 +182,13 @@ class _SupplyState extends State<Supply> {
         ),
       ),
 
+      /// BOTTOM NAV BAR
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.red,
         unselectedItemColor: Colors.grey,
-        onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
+        onTap: _onItemTapped,
         items: const [
           BottomNavigationBarItem(
               icon: Icon(Icons.home_outlined), label: 'Home'),

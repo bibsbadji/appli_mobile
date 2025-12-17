@@ -1,5 +1,5 @@
-import 'package:cours1/src/ui/screens/cart_page.dart';
-import 'package:cours1/src/ui/screens/supply.dart';
+import 'package:cours1/src/ui/screens/supply/cart_page.dart';
+import 'package:cours1/src/ui/screens/supply/supply.dart';
 import 'package:flutter/material.dart';
 
 void main() {

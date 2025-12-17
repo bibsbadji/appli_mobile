@@ -193,9 +193,9 @@ class _CartPageState extends State<CartPage> {
     );
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        const Text('Total:', style: TextStyle(fontSize: 16)),
+        const Text('Total:', style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
         Text(
           '$total CFA',
           style: const TextStyle(

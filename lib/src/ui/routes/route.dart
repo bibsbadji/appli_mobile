@@ -1,9 +1,9 @@
 import 'package:cours1/src/ui/routes/route_path.dart';
 import 'package:cours1/src/ui/screens/login/login.dart';
-import 'package:cours1/src/ui/screens/splash_screen.dart';
+import 'package:cours1/src/ui/screens/supply/splash_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../screens/cart_page.dart';
+import '../screens/supply/cart_page.dart';
 
 class Routers {
   static Route<dynamic> generateRoute(RouteSettings settings) {

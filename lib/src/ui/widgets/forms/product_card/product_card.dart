@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../screens/supply.dart'; // <-- pour utiliser Product
+import '../../../screens/supply/supply.dart'; // <-- pour utiliser Product
 
 class ProductCard extends StatelessWidget {
   final Product product;
