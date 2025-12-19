@@ -1,8 +1,10 @@
-import 'package:cours1/src/utiles/my_assets/images_assets.dart';
-import 'package:cours1/src/ui/screens/home/home.dart'; // Importations de la page d'accueil
+import 'package:cours1/src/ui/screens/home/home.dart';
 import 'package:flutter/material.dart';
+import 'package:cours1/src/utiles/my_assets/images_assets.dart';
+
 import 'package:cours1/src/ui/widgets/forms/text_input/text_input.dart';
 import 'package:cours1/src/ui/widgets/forms/app_button/app_button.dart';
+import 'package:cours1/src/data/users_data.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -12,10 +14,13 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  // Contrôleurs pour récupérer les valeurs
+  // Contrôleurs
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  // Variable pour afficher le chargement
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -26,33 +31,69 @@ class _LoginState extends State<Login> {
 
   // Fonction de connexion
   void _login() {
-    if (_formKey.currentState!.validate()) {
-      String email = _emailController.text.trim();
-      String _ = _passwordController.text.trim();
-
-      // TODO: Vérifier les identifiants (API, Firebase, etc.)
-      
-      // Si connexion réussie, naviguer vers HomePage
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const Home()),
-      );
-
-      // Message de succès
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Bienvenue $email!'),
-          backgroundColor: Colors.green,
-        ),
-      );
+    // Valider le formulaire
+    if (!_formKey.currentState!.validate()) {
+      return;
     }
+
+    // Afficher le chargement
+    setState(() {
+      _isLoading = true;
+    });
+
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+
+    // Vérifier les identifiants
+    User? user = UsersData.verifierConnexion(email, password);
+
+    // Simuler un délai (comme si on contactait un serveur)
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        _isLoading = false;
+      });
+
+      if (user != null) {
+        // ✅ Connexion réussie
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Bienvenue ${user.nom}!'),
+            backgroundColor: Colors.green,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+
+        // Naviguer vers la page d'accueil
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Home(
+              userName: user.nom,
+              userEmail: user.email,
+            ),
+          ),
+        );
+      } else {
+        // ❌ Identifiants incorrects
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Email ou mot de passe incorrect'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+          ),
+        );
+
+        // Effacer le mot de passe
+        _passwordController.clear();
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Login"),
+        title: const Text("Connexion"),
         centerTitle: true,
       ),
       body: Padding(
@@ -69,6 +110,16 @@ class _LoginState extends State<Login> {
                   ImagesAssets.logo,
                   width: 120,
                   height: 120,
+                ),
+                
+                const SizedBox(height: 30),
+                
+                const Text(
+                  'Connectez-vous à votre compte',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 
                 const SizedBox(height: 30),
@@ -112,17 +163,12 @@ class _LoginState extends State<Login> {
                 
                 const SizedBox(height: 10),
                 
-                // Lien "Mot de passe oublié"
+                // Mot de passe oublié
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {
-                      // TODO: Page mot de passe oublié
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Fonctionnalité à venir'),
-                        ),
-                      );
+                      _showForgotPasswordDialog();
                     },
                     child: const Text('Mot de passe oublié ?'),
                   ),
@@ -131,10 +177,12 @@ class _LoginState extends State<Login> {
                 const SizedBox(height: 20),
                 
                 // Bouton de connexion
-                AppButton(
-                  onPressed: _login,
-                  text: 'Se connecter',
-                ),
+                _isLoading
+                    ? const CircularProgressIndicator()
+                    : AppButton(
+                        onPressed: _login,
+                        text: 'Se connecter',
+                      ),
                 
                 const SizedBox(height: 20),
                 
@@ -142,24 +190,158 @@ class _LoginState extends State<Login> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("Vous n'avez pas de compte ? "),
+                    const Text("Pas encore de compte ? "),
                     TextButton(
                       onPressed: () {
-                        // TODO: Navigation vers page d'inscription
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Page d\'inscription à venir'),
-                          ),
-                        );
+                        _showRegisterDialog();
                       },
                       child: const Text('Inscrivez-vous'),
                     ),
                   ],
                 ),
+                
+                const SizedBox(height: 30),
+                
+                // Afficher les comptes de test
+              
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+
+  // Dialog mot de passe oublié
+  void _showForgotPasswordDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Mot de passe oublié'),
+        content: const Text(
+          'Pour cette démo, consultez la liste des comptes de test ci-dessous.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Dialog inscription
+  void _showRegisterDialog() {
+    final emailController = TextEditingController();
+    final nameController = TextEditingController();
+    final passwordController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Inscription'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: const InputDecoration(
+                  labelText: 'Nom complet',
+                  prefixIcon: Icon(Icons.person),
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: emailController,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  prefixIcon: Icon(Icons.email),
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText: 'Mot de passe',
+                  prefixIcon: Icon(Icons.lock),
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Annuler'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              String email = emailController.text.trim();
+              String name = nameController.text.trim();
+              String password = passwordController.text.trim();
+
+              if (email.isEmpty || name.isEmpty || password.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Veuillez remplir tous les champs',style: TextStyle(
+                      color: Colors.blue
+                    ),),
+                    backgroundColor: Colors.orange,
+                    
+
+                  ),
+                );
+                return;
+              }
+
+              if (!email.contains('@')) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Email invalide'),
+                    backgroundColor: Colors.red,
+                  ),
+                  
+                );
+                return;
+              }
+
+              if (UsersData.emailExiste(email)) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Cet email est déjà utilisé'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return;
+              }
+
+              // Ajouter le nouvel utilisateur
+              UsersData.ajouterUtilisateur(User(
+                email: email,
+                nom: name,
+                motDePasse: password,
+              ));
+
+              Navigator.pop(context);
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Compte créé avec succès !'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+
+              // Remplir automatiquement les champs
+              _emailController.text = email;
+              _passwordController.text = password;
+            },
+            child: const Text('Créer'),
+          ),
+        ],
       ),
     );
   }
