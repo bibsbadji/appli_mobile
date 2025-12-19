@@ -15,3 +15,4 @@ const String help = '/help';
 const String terms = '/terms';
 const String privacy = '/privacy';
 const String contactUs = '/contact_us';
+const String basket = '/cart_page';

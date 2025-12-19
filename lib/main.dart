@@ -1,7 +1,5 @@
-import 'package:cours1/src/ui/routes/route.dart';
-import 'package:cours1/src/ui/routes/route_path.dart';
-import 'package:cours1/src/ui/screens/login/login.dart';
-import 'package:cours1/src/ui/screens/splash_screen.dart';
+import 'package:cours1/src/ui/screens/supply/cart_page.dart';
+import 'package:cours1/src/ui/screens/supply/supply.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -18,9 +16,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      onGenerateRoute: Routers.generateRoute,
-      initialRoute: splash,
-  
+      home: Supply(),
+      routes: {
+        '/cart_page': (context) => const CartPage(), // ici on définit la route
+      },
     );
   }
 }
