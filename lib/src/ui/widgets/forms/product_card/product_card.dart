@@ -44,7 +44,7 @@ class ProductCard extends StatelessWidget {
             Text(
               "${product.price} CFA",
               style: const TextStyle(
-                color: Colors.red,
+                color: Colors.blue,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -73,7 +73,7 @@ class ProductCard extends StatelessWidget {
                   style: TextStyle(color: Colors.white),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
+                  backgroundColor: Colors.blue,
                 ),
               ),
             ),

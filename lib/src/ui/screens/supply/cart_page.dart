@@ -1,3 +1,4 @@
+import 'package:cours1/src/ui/routes/route_path.dart';
 import 'package:flutter/material.dart';
 import 'supply.dart'; // pour Product, CartItem, CartData
 
@@ -28,7 +29,7 @@ class _CartPageState extends State<CartPage> {
         ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(2),
-          child: Container(height: 2, color: Colors.red),
+          child: Container(height: 2, color: Colors.blue),
         ),
       ),
 
@@ -92,7 +93,7 @@ class _CartPageState extends State<CartPage> {
   Widget _stepCircle({bool active = false}) {
     return CircleAvatar(
       radius: 10,
-      backgroundColor: active ? Colors.red : Colors.grey.shade300,
+      backgroundColor: active ? Colors.blue : Colors.grey.shade300,
       child: active
           ? const CircleAvatar(radius: 4, backgroundColor: Colors.white)
           : null,
@@ -130,7 +131,7 @@ class _CartPageState extends State<CartPage> {
                 Text(
                   '${item.product.price} CFA',
                   style: const TextStyle(
-                    color: Colors.red,
+                    color: Colors.blue,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -141,7 +142,7 @@ class _CartPageState extends State<CartPage> {
           _quantityControl(item),
 
           IconButton(
-            icon: const Icon(Icons.delete_outline, color: Colors.red),
+            icon: const Icon(Icons.delete_outline, color: Colors.blue),
             onPressed: () {
               setState(() {
                 CartData.items.remove(item);
@@ -200,7 +201,7 @@ class _CartPageState extends State<CartPage> {
           '$total CFA',
           style: const TextStyle(
             fontSize: 18,
-            color: Colors.red,
+            color: Colors.blue,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -217,11 +218,11 @@ class _CartPageState extends State<CartPage> {
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: const Icon(Icons.arrow_back, color: Colors.red),
+            icon: const Icon(Icons.arrow_back, color: Colors.blue),
             label: const Text('Continue Shopping',
-                style: TextStyle(color: Colors.red)),
+                style: TextStyle(color: Colors.blue)),
             style: OutlinedButton.styleFrom(
-              side: const BorderSide(color: Colors.red),
+              side: const BorderSide(color: Colors.blue),
               padding: const EdgeInsets.symmetric(vertical: 14),
             ),
           ),
@@ -229,11 +230,13 @@ class _CartPageState extends State<CartPage> {
         const SizedBox(width: 12),
         Expanded(
           child: ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, checkout);
+            },
             icon: const Icon(Icons.arrow_forward, color: Colors.white),
             label: const Text('Continue to Checkout',style: TextStyle(color: Colors.white),),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
+              backgroundColor: Colors.blue,
               padding: const EdgeInsets.symmetric(vertical: 14),
             ),
           ),

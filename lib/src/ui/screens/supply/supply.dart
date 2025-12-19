@@ -131,7 +131,7 @@ class _SupplyState extends State<Supply> {
                       minHeight: 18,
                     ),
                     decoration: const BoxDecoration(
-                      color: Colors.red,
+                      color: Colors.blue,
                       shape: BoxShape.circle,
                     ),
                     child: Text(
@@ -155,7 +155,7 @@ class _SupplyState extends State<Supply> {
         ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(2),
-          child: Container(height: 2, color: Colors.red),
+          child: Container(height: 2, color: Colors.blue),
         ),
       ),
 
@@ -185,7 +185,7 @@ class _SupplyState extends State<Supply> {
       /// BOTTOM NAV BAR
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.red,
+        selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey,
         type: BottomNavigationBarType.fixed,
         onTap: _onItemTapped,
