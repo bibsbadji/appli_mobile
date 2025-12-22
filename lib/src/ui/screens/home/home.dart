@@ -221,7 +221,7 @@ class _HomeState extends State<Home> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: carouselImages.asMap().entries.map((e) {
-        return Container(
+        return Container( 
           width: _currentCarouselIndex == e.key ? 24 : 8,
           height: 8,
           margin: const EdgeInsets.symmetric(horizontal: 4),
