@@ -9,11 +9,7 @@ class Home extends StatefulWidget {
   final String userName;
   final String userEmail;
 
-  const Home({
-    super.key,
-    required this.userName,
-    required this.userEmail,
-  });
+  const Home({super.key, required this.userName, required this.userEmail});
 
   @override
   State<Home> createState() => _HomeState();
@@ -59,7 +55,6 @@ class _HomeState extends State<Home> {
                     const SizedBox(height: 30),
                     _buildMainMenu(),
                     const SizedBox(height: 20),
-            
                   ],
                 ),
               ),
@@ -88,18 +83,30 @@ class _HomeState extends State<Home> {
           ),
           _drawerItem(Icons.home, 'Accueil', () => Navigator.pop(context)),
           _drawerItem(Icons.favorite, 'Favorie', () => Navigator.pop(context)),
-          _drawerItem(Icons.shopping_cart, 'card',() => Navigator.pop(context) ),
+          _drawerItem(
+            Icons.shopping_cart,
+            'card',
+            () => Navigator.pop(context),
+          ),
           _drawerItem(Icons.person, 'Profil', () => Navigator.pop(context)),
           const Divider(),
-          _drawerItem(Icons.logout, 'Déconnexion', _showLogoutDialog,
-              color: Colors.blue),
+          _drawerItem(
+            Icons.logout,
+            'Déconnexion',
+            _showLogoutDialog,
+            color: Colors.blue,
+          ),
         ],
       ),
     );
   }
 
-  Widget _drawerItem(IconData icon, String title, VoidCallback onTap,
-      {Color? color}) {
+  Widget _drawerItem(
+    IconData icon,
+    String title,
+    VoidCallback onTap, {
+    Color? color,
+  }) {
     return ListTile(
       leading: Icon(icon, color: color ?? Colors.blue),
       title: Text(title, style: TextStyle(color: color ?? Colors.black)),
@@ -119,21 +126,16 @@ class _HomeState extends State<Home> {
             icon: const Icon(Icons.menu),
             onPressed: () => _scaffoldKey.currentState!.openDrawer(),
           ),
-          const Text('Accueil',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-  
+          const Text(
+            'Accueil',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+
           IconButton(
             icon: const Icon(Icons.notifications, color: Colors.blue),
-            onPressed: () {
-
-            },
+            onPressed: () {},
           ),
-         
         ],
-          
-
-          
-        
       ),
     );
   }
@@ -171,20 +173,20 @@ class _HomeState extends State<Home> {
             onTap: () => setState(() => _selectedTabIndex = i),
             child: Container(
               margin: const EdgeInsets.only(right: 12),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
               decoration: BoxDecoration(
                 color: selected ? Colors.blue[50] : Colors.white,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                    color: selected ? Colors.blue : Colors.grey[300]!),
+                  color: selected ? Colors.blue : Colors.grey[300]!,
+                ),
               ),
               child: Text(
                 tabs[i],
                 style: TextStyle(
-                    color: selected ? Colors.blue : Colors.grey[700],
-                    fontWeight:
-                        selected ? FontWeight.bold : FontWeight.normal),
+                  color: selected ? Colors.blue : Colors.grey[700],
+                  fontWeight: selected ? FontWeight.bold : FontWeight.normal,
+                ),
               ),
             ),
           );
@@ -238,75 +240,73 @@ class _HomeState extends State<Home> {
   }
 
   // ================= MENU =================
- Widget _buildMainMenu() {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: Row(
-      children: [
-        _menuItem(
-          Icons.local_shipping,
-          'Supply',
-          () {
-            Navigator.pushNamed(context, supply); // route Produits
-          },
+  Widget _buildMainMenu() {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
         ),
-        const SizedBox(width: 12),
-        _menuItem(
-          Icons.inventory_2,
-          'Inventory',
-          () {
-            // Navigator.pushNamed(context, products);
-          },
-        ),
-        const SizedBox(width: 12),
-        _menuItem(
-          Icons.point_of_sale,
-          'Cahier',
-          () {
-            // Navigator.pushNamed(context, products);
-          },
-        ),
-      ],
-    ),
-  );
-}
+        itemCount: 5,
+        itemBuilder: (_, i) {
+          switch (i) {
+            case 0:
+              return _menuItem(Icons.local_shipping, 'Supply', () {
+                Navigator.pushNamed(context, supply); // route Produits
+              });
+            case 1:
+              return _menuItem(Icons.inventory_2, 'Inventory', () {
+                // Navigator.pushNamed(context, products);
+              });
+            case 2:
+              return _menuItem(Icons.book, 'Cahier', () {
+                // Navigator.pushNamed(context, products);
+              });
+            case 3:
+              return _menuItem(Icons.account_balance_wallet, 'Wallet', () {
+                // Navigator.pushNamed(context, products);
+              });
+            case 4:
+              return _menuItem(Icons.credit_card, 'Microcredit', () {
+                // Navigator.pushNamed(context, products);
+              });
+            default:
+              return Container();
+          }
+        },
+      ),
+    );
+  }
 
-
- Widget _menuItem(
-  IconData icon,
-  String label,
-  VoidCallback onTap,
-) {
-  return Expanded(
-    child: InkWell(
-      borderRadius: BorderRadius.circular(16),
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              blurRadius: 4,
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Icon(icon, size: 28, color: Colors.blue),
-            const SizedBox(height: 8),
-            Text(label),
-          ],
+  Widget _menuItem(IconData icon, String label, VoidCallback onTap) {
+    return Expanded(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(color: Colors.grey.withOpacity(0.1), blurRadius: 4),
+            ],
+          ),
+          child: Column(
+            children: [
+              Icon(icon, size: 28, color: Colors.blue),
+              const SizedBox(height: 8),
+              Text(label),
+            ],
+          ),
         ),
       ),
-    ),
-  );
-}
-
-
-
+    );
+  }
 
   // ================= CHAT =================
   Widget _buildChatButton() {

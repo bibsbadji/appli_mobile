@@ -56,11 +56,12 @@ class _TextInputState extends State<TextInput> {
         decoration: InputDecoration(
           labelText: widget.labelText,
           errorText: widget.errorText,
-          
+
           // Icône à gauche
-          prefixIcon: widget.prefixIcon ?? 
+          prefixIcon:
+              widget.prefixIcon ??
               (widget.iconData != null ? Icon(widget.iconData) : null),
-          
+
           // Icône à droite (avec toggle pour mot de passe)
           suffixIcon: widget.ispassword
               ? IconButton(
@@ -74,7 +75,7 @@ class _TextInputState extends State<TextInput> {
                   },
                 )
               : widget.suffixIcon,
-          
+
           // Border avec borderRadius personnalisé
           border: OutlineInputBorder(
             borderRadius: widget.borderRadius ?? BorderRadius.circular(8),
@@ -85,7 +86,10 @@ class _TextInputState extends State<TextInput> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: widget.borderRadius ?? BorderRadius.circular(8),
-            borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 2),
+            borderSide: BorderSide(
+              color: Theme.of(context).primaryColor,
+              width: 2,
+            ),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: widget.borderRadius ?? BorderRadius.circular(8),
@@ -95,9 +99,12 @@ class _TextInputState extends State<TextInput> {
             borderRadius: widget.borderRadius ?? BorderRadius.circular(8),
             borderSide: const BorderSide(color: Colors.red, width: 2),
           ),
-          
+
           // Padding intérieur
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 16,
+          ),
         ),
       ),
     );
