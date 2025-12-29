@@ -123,8 +123,8 @@ class _PaymentPageState extends State<PaymentPage> {
                     child: ElevatedButton.icon(
                       onPressed:
                       selectedMethod == null ? null : _validateAndPay,
-                      icon: const Icon(Icons.check),
-                      label: const Text('Payer'),
+                      icon: const Icon(Icons.check, color: Colors.white,),
+                      label: const Text('Payer', style: TextStyle(color: Colors.white),),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
                         padding: const EdgeInsets.symmetric(vertical: 14),
