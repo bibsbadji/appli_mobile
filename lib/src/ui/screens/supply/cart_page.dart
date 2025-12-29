@@ -1,6 +1,6 @@
-import 'package:cours1/src/ui/routes/route_path.dart';
 import 'package:flutter/material.dart';
-import 'supply.dart'; // pour Product, CartItem, CartData
+import 'package:cours1/src/ui/routes/route_path.dart';
+import 'supply.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -10,14 +10,21 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  List<CartItem> get cartItems => CartData.items;
+
+  int get totalPrice {
+    return cartItems.fold(
+      0,
+      (sum, item) => sum + item.product.price * item.quantity,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final cartItems = CartData.items;
-
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text('My Cart', style: TextStyle(color: Colors.black)),
+        title: const Text('Panier', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.white,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
@@ -26,6 +33,7 @@ class _CartPageState extends State<CartPage> {
           child: Container(height: 2, color: Colors.blue),
         ),
       ),
+
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -44,6 +52,7 @@ class _CartPageState extends State<CartPage> {
                   return _cartItem(item);
                 },
               ),
+
             ),
             const SizedBox(height: 16),
             _totalSection(),
@@ -72,9 +81,9 @@ class _CartPageState extends State<CartPage> {
         const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Stopping Cart', style: TextStyle(fontSize: 12)),
-            Text('Checkout Details', style: TextStyle(fontSize: 12)),
-            Text('Payment', style: TextStyle(fontSize: 12)),
+            Text('Panier', style: TextStyle(fontSize: 12)),
+            Text(' Details', style: TextStyle(fontSize: 12)),
+            Text('Paiement', style: TextStyle(fontSize: 12)),
           ],
         ),
       ],
@@ -189,24 +198,21 @@ class _CartPageState extends State<CartPage> {
             },
           ),
         ],
+
       ),
     );
   }
 
   // ================= TOTAL =================
   Widget _totalSection() {
-    final total = CartData.items.fold(
-      0,
-          (sum, item) => sum + item.product.price * item.quantity,
-    );
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const Text('Total :',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+
         Text(
-          '$total CFA',
+          '$totalPrice CFA',
           style: const TextStyle(
               fontSize: 18, color: Colors.blue, fontWeight: FontWeight.bold),
         ),
@@ -220,34 +226,35 @@ class _CartPageState extends State<CartPage> {
       children: [
         Expanded(
           child: OutlinedButton.icon(
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            onPressed: () => Navigator.pop(context),
             icon: const Icon(Icons.arrow_back, color: Colors.blue),
-            label: const Text('Return to Shop',
+            label: const Text('Retour au magasin',
                 style: TextStyle(color: Colors.blue)),
             style: OutlinedButton.styleFrom(
               side: const BorderSide(color: Colors.blue),
               padding: const EdgeInsets.symmetric(vertical: 14),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8)),
+
             ),
           ),
         ),
         const SizedBox(width: 12),
+
         Expanded(
           child: ElevatedButton.icon(
             onPressed: () {
               Navigator.pushNamed(context, checkout);
             },
             icon: const Icon(Icons.arrow_forward, color: Colors.white),
-            label: const Text('Continue to Checkout',
+            label: const Text('Continuer au details',
                 style: TextStyle(color: Colors.white)),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,
               padding: const EdgeInsets.symmetric(vertical: 14),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8)),
+
             ),
           ),
         ),

@@ -7,11 +7,7 @@ class Home extends StatefulWidget {
   final String userName;
   final String userEmail;
 
-  const Home({
-    super.key,
-    required this.userName,
-    required this.userEmail,
-  });
+  const Home({super.key, required this.userName, required this.userEmail});
 
   @override
   State<Home> createState() => _HomeState();
@@ -90,13 +86,18 @@ class _HomeState extends State<Home> {
           const Divider(),
           _drawerItem(Icons.logout, 'Déconnexion', _showLogoutDialog,
               color: Colors.blue.shade600),
+
         ],
       ),
     );
   }
 
-  Widget _drawerItem(IconData icon, String title, VoidCallback onTap,
-      {Color? color}) {
+  Widget _drawerItem(
+    IconData icon,
+    String title,
+    VoidCallback onTap, {
+    Color? color,
+  }) {
     return ListTile(
       leading: Icon(icon, color: color ?? Colors.blue.shade600),
       title: Text(title, style: TextStyle(color: color ?? Colors.black)),
@@ -118,6 +119,7 @@ class _HomeState extends State<Home> {
           ),
           const Text('Accueil',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+
           IconButton(
             icon: const Icon(Icons.notifications, color: Colors.blue),
             onPressed: () {},
@@ -166,12 +168,14 @@ class _HomeState extends State<Home> {
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
                   color: selected ? Colors.blue.shade600 : Colors.grey[300]!,
+
                 ),
               ),
               child: Text(
                 tabs[i],
                 style: TextStyle(
                   color: selected ? Colors.blue.shade800 : Colors.grey[700],
+
                   fontWeight: selected ? FontWeight.bold : FontWeight.normal,
                 ),
               ),
@@ -239,11 +243,13 @@ class _HomeState extends State<Home> {
           const SizedBox(width: 12),
           _menuItem(Icons.point_of_sale, Colors.blue.shade600, 'Cahier', () {}),
         ],
+
       ),
     );
   }
 
   Widget _menuItem(IconData icon, Color color, String label, VoidCallback onTap) {
+
     return Expanded(
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
@@ -259,6 +265,7 @@ class _HomeState extends State<Home> {
                 blurRadius: 6,
                 offset: const Offset(0, 2),
               ),
+
             ],
           ),
           child: Column(
@@ -266,6 +273,7 @@ class _HomeState extends State<Home> {
               Icon(icon, size: 28, color: color),
               const SizedBox(height: 8),
               Text(label, style: TextStyle(color: Colors.grey[800])),
+
             ],
           ),
         ),
@@ -278,7 +286,7 @@ class _HomeState extends State<Home> {
     return FloatingActionButton.extended(
       backgroundColor: Colors.blue,
       icon: const Icon(Icons.chat_bubble_outline, color: Colors.white),
-      label: const Text('Ask Now', style: TextStyle(color: Colors.white),),
+      label: const Text('Question?', style: TextStyle(color: Colors.white),),
       onPressed: () {},
     );
   }
