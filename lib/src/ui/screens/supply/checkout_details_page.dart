@@ -172,7 +172,6 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
           ),
         ),
       ),
-
     );
   }
 
@@ -183,13 +182,6 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
       return 'This field is required';
     }
     return null;
-  }
-
-  void _submit() {
-    if (_formKey.currentState!.validate()) {
-      // Ici plus tard → PaymentPage
-      debugPrint('Form validé');
-    }
   }
 
   Widget _stepper() {
@@ -220,8 +212,7 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
   Widget _circle({bool active = false, bool done = false}) {
     return CircleAvatar(
       radius: 10,
-      backgroundColor:
-      active || done ? Colors.blue : Colors.grey.shade300,
+      backgroundColor: active || done ? Colors.blue : Colors.grey.shade300,
       child: done
           ? const Icon(Icons.check, size: 12, color: Colors.white)
           : active
@@ -231,8 +222,6 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
   }
 
   Widget _line() {
-    return Expanded(
-      child: Container(height: 2, color: Colors.grey.shade300),
-    );
+    return Expanded(child: Container(height: 2, color: Colors.grey.shade300));
   }
 }
