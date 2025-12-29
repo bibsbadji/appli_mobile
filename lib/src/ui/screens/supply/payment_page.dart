@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../supply/supply.dart'; // CartData, CartItem, Product
+import '../supply/supply.dart';
 
 enum PaymentMethod { cash, card, mobile }
 
@@ -13,7 +13,6 @@ class PaymentPage extends StatefulWidget {
 class _PaymentPageState extends State<PaymentPage> {
   PaymentMethod? selectedMethod;
 
-  // Controllers
   final _cardFormKey = GlobalKey<FormState>();
   final _cardNameCtrl = TextEditingController();
   final _cardNumberCtrl = TextEditingController();
@@ -35,60 +34,61 @@ class _PaymentPageState extends State<PaymentPage> {
     super.dispose();
   }
 
-  // ================= TOTAL =================
-  int get subtotal {
-    return CartData.items.fold(
-      0,
-      (sum, item) => sum + item.product.price * item.quantity,
-    );
-  }
+  int get subtotal =>
+      CartData.items.fold(0, (s, i) => s + i.product.price * i.quantity);
 
   int get total => subtotal - (subtotal * discount ~/ 100);
 
-  String get paymentLabel {
-    switch (selectedMethod) {
-      case PaymentMethod.cash:
-        return 'Cash';
-      case PaymentMethod.card:
-        return 'Carte bancaire';
-      case PaymentMethod.mobile:
-        return 'Mobile Money';
-      default:
-        return '';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final primary = Colors.blue;
 
-      backgroundColor: Colors.grey[100],
-      appBar: _appBar(),
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: const Text(
+          'Paiement',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+        iconTheme: const IconThemeData(color: Colors.black),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(2),
+          child: Container(height: 2, color: primary),
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              _stepper(primary),
+              const SizedBox(height: 20),
+
               const Text(
-                'Méthode de paiement',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ' Méthode de paiement',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 16),
 
               _paymentMethod(
+                primary,
                 icon: Icons.money,
                 title: 'Cash',
                 subtitle: 'Paiement à la livraison',
                 value: PaymentMethod.cash,
               ),
               _paymentMethod(
+                primary,
                 icon: Icons.credit_card,
                 title: 'Carte bancaire',
                 subtitle: 'Visa, Mastercard',
                 value: PaymentMethod.card,
               ),
               _paymentMethod(
+                primary,
                 icon: Icons.phone_android,
                 title: 'Mobile Money',
                 subtitle: 'Wave, Orange Money',
@@ -96,41 +96,39 @@ class _PaymentPageState extends State<PaymentPage> {
               ),
 
               if (selectedMethod == PaymentMethod.mobile)
-                _textField(
-                  _phoneCtrl,
-                  'Numéro de téléphone (77, 78, 70, 76...)',
-                  TextInputType.phone,
-                ),
-              const SizedBox(height: 16),
-              if (selectedMethod == PaymentMethod.card) _cardForm(),
+                _input(_phoneCtrl, 'Numéro de téléphone', Icons.phone),
+
+              if (selectedMethod == PaymentMethod.card) _cardForm(primary),
 
               const SizedBox(height: 24),
-              _summaryCard(),
-              const SizedBox(height: 24),
+              _summary(primary),
 
+              const SizedBox(height: 24),
               Row(
                 children: [
                   Expanded(
                     child: OutlinedButton.icon(
                       onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.arrow_back),
-                      label: const Text('Return to Cart'),
+                      icon: const Icon(Icons.arrow_back, color: Colors.blue),
+                      label: const Text('Retour ', style: TextStyle(color: Colors.blue)),
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: Colors.blue),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: ElevatedButton.icon(
-                      onPressed: selectedMethod == null
-                          ? null
-                          : _validateAndPay,
-                      icon: const Icon(Icons.arrow_forward),
-                      label: const Text(
-                        'Checkout',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
+                      onPressed:
+                      selectedMethod == null ? null : _validateAndPay,
+                      icon: const Icon(Icons.check),
+                      label: const Text('Payer'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
                         padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                       ),
                     ),
                   ),
@@ -143,120 +141,56 @@ class _PaymentPageState extends State<PaymentPage> {
     );
   }
 
-  // ================= APPBAR =================
-  AppBar _appBar() => AppBar(
-    title: const Text(
-      'Checkout',
-      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-    ),
-    backgroundColor: Colors.white,
-    elevation: 0,
-    iconTheme: const IconThemeData(color: Colors.black),
-    bottom: PreferredSize(
-      preferredSize: const Size.fromHeight(1),
-      child: Container(height: 1, color: Colors.grey[300]),
-    ),
-  );
-
-  // ================= CARD FORM =================
-  Widget _cardForm() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Form(
-        key: _cardFormKey,
-        child: Column(
+  // ================= STEPPER =================
+  Widget _stepper(Color primary) {
+    return Column(
+      children: [
+        Row(
           children: [
-            _textField(_cardNameCtrl, 'Nom sur la carte', TextInputType.text),
-            const SizedBox(height: 12),
-
-            _textField(
-              _cardNumberCtrl,
-              'Numéro de carte',
-              TextInputType.number,
-              minLength: 16,
-            ),
-            const SizedBox(height: 12),
-
-            Row(
-              children: [
-                Expanded(
-                  child: _textField(
-                    _expiryCtrl,
-                    'MM/AA',
-                    TextInputType.datetime,
-                    minLength: 4,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _textField(
-                    _cvvCtrl,
-                    'CVV',
-                    TextInputType.number,
-                    minLength: 3,
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 12),
-
-            Row(
-              children: [
-                Expanded(
-                  child: _textField(
-                    _discountCtrl,
-                    'Discount Code',
-                    TextInputType.text,
-                    minLength: 3,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                SizedBox(
-                  height: 48,
-                  child: ElevatedButton(
-                    onPressed: _applyDiscount,
-                    child: const Text('Apply'),
-                  ),
-                ),
-              ],
-            ),
+            _circle(primary, done: true),
+            _line(),
+            _circle(primary, done: true),
+            _line(),
+            _circle(primary, active: true),
           ],
         ),
-      ),
+        const SizedBox(height: 6),
+        const Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Cart', style: TextStyle(fontSize: 12)),
+            Text('Details', style: TextStyle(fontSize: 12)),
+            Text('Payment', style: TextStyle(fontSize: 12)),
+          ],
+        ),
+      ],
     );
   }
 
-  // ================= SUMMARY =================
-  Widget _summaryCard() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)],
-      ),
-      child: Column(
-        children: [
-          _SummaryRow('Produits', CartData.items.length.toString()),
-          const SizedBox(height: 8),
-          _SummaryRow('Sous-total', '$subtotal FCFA'),
-          if (discount > 0) _SummaryRow('Réduction', '-$discount%'),
-          const Divider(),
-          _SummaryRow('Total', '$total FCFA', bold: true),
-        ],
-      ),
+  Widget _circle(Color primary, {bool active = false, bool done = false}) {
+    return CircleAvatar(
+      radius: 10,
+      backgroundColor: active || done ? primary : Colors.grey.shade300,
+      child: done
+          ? const Icon(Icons.check, size: 12, color: Colors.white)
+          : active
+          ? const CircleAvatar(radius: 4, backgroundColor: Colors.white)
+          : null,
     );
   }
+
+  Widget _line() =>
+      Expanded(child: Container(height: 2, color: Colors.grey.shade300));
 
   // ================= PAYMENT METHOD =================
-  Widget _paymentMethod({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required PaymentMethod value,
-  }) {
-    final isSelected = selectedMethod == value;
+  Widget _paymentMethod(
+      Color primary, {
+        required IconData icon,
+        required String title,
+        required String subtitle,
+        required PaymentMethod value,
+      }) {
+    final selected = selectedMethod == value;
 
     return GestureDetector(
       onTap: () => setState(() => selectedMethod = value),
@@ -266,34 +200,28 @@ class _PaymentPageState extends State<PaymentPage> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: isSelected ? Colors.blue : Colors.transparent,
-            width: 1.5,
-          ),
+          border: Border.all(color: selected ? primary : Colors.transparent),
           boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
         ),
         child: Row(
           children: [
-            Icon(icon, color: Colors.blue),
+            Icon(icon, color: primary),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    subtitle,
-                    style: TextStyle(color: Colors.grey[600], fontSize: 12),
-                  ),
+                  Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  Text(subtitle,
+                      style: TextStyle(color: Colors.grey[600], fontSize: 12)),
                 ],
               ),
             ),
             Icon(
-              isSelected ? Icons.radio_button_checked : Icons.radio_button_off,
-              color: Colors.blue,
+              selected
+                  ? Icons.radio_button_checked
+                  : Icons.radio_button_off,
+              color: primary,
             ),
           ],
         ),
@@ -301,21 +229,98 @@ class _PaymentPageState extends State<PaymentPage> {
     );
   }
 
-  // ================= VALIDATION =================
-  void _validateAndPay() {
-    if (selectedMethod == PaymentMethod.card &&
-        !_cardFormKey.currentState!.validate()) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Carte invalide')));
-      return;
-    }
+  // ================= CARD FORM =================
+  Widget _cardForm(Color primary) {
+    return Column(
+      children: [
+        _input(_cardNameCtrl, 'Nom sur la carte', Icons.person),
+        const SizedBox(height: 12),
+        _input(_cardNumberCtrl, 'Numéro de carte', Icons.credit_card),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(child: _input(_expiryCtrl, 'MM/AA', Icons.date_range)),
+            const SizedBox(width: 12),
+            Expanded(child: _input(_cvvCtrl, 'CVV', Icons.lock)),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(child: _input(_discountCtrl, 'Code promo', Icons.discount)),
+            const SizedBox(width: 12),
+            ElevatedButton(
+              onPressed: _applyDiscount,
+              style: ElevatedButton.styleFrom(backgroundColor: primary),
+              child: const Text('Apply'),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
 
+  // ================= INPUT =================
+  Widget _input(
+      TextEditingController ctrl, String label, IconData icon) {
+    return TextFormField(
+      controller: ctrl,
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(icon),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+    );
+  }
+
+  // ================= SUMMARY =================
+  Widget _summary(Color primary) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)],
+      ),
+      child: Column(
+        children: [
+          _row('Produits', CartData.items.length.toString()),
+          _row('Sous-total', '$subtotal FCFA'),
+          if (discount > 0) _row('Réduction', '-$discount%'),
+          const Divider(),
+          _row('Total', '$total FCFA', bold: true),
+        ],
+      ),
+    );
+  }
+
+  Widget _row(String l, String v, {bool bold = false}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(l),
+        Text(v,
+            style: TextStyle(fontWeight: bold ? FontWeight.bold : null)),
+      ],
+    );
+  }
+
+  // ================= ACTIONS =================
+  void _applyDiscount() {
+    if (_discountCtrl.text.trim().toUpperCase() == 'PROMO10') {
+      setState(() => discount = 10);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Réduction -10% appliquée')),
+      );
+    }
+  }
+
+  void _validateAndPay() {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Paiement réussi'),
-        content: Text('Total payé: $total FCFA\nMéthode: $paymentLabel'),
+        content: Text('Total payé : $total FCFA'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -323,65 +328,6 @@ class _PaymentPageState extends State<PaymentPage> {
           ),
         ],
       ),
-    );
-  }
-
-  // ================= DISCOUNT =================
-  void _applyDiscount() {
-    if (_discountCtrl.text.trim().toUpperCase() == 'PROMO10') {
-      setState(() => discount = 10);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('🎉 Réduction -10% appliquée')),
-      );
-    } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Code promo invalide')));
-    }
-  }
-
-  // ================= TEXT FIELD =================
-  Widget _textField(
-    TextEditingController ctrl,
-    String label,
-    TextInputType type, {
-    int minLength = 1,
-  }) {
-    return TextFormField(
-      controller: ctrl,
-      keyboardType: type,
-      decoration: InputDecoration(
-        labelText: label,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-      ),
-      validator: (v) {
-        if (v == null || v.trim().isEmpty) return 'Champ requis';
-        if (v.length < minLength) return 'Format invalide';
-        return null;
-      },
-    );
-  }
-}
-
-// ================= SUMMARY ROW =================
-class _SummaryRow extends StatelessWidget {
-  final String label;
-  final String value;
-  final bool bold;
-
-  const _SummaryRow(this.label, this.value, {this.bold = false});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(label),
-        Text(
-          value,
-          style: TextStyle(fontWeight: bold ? FontWeight.bold : null),
-        ),
-      ],
     );
   }
 }

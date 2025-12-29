@@ -24,7 +24,7 @@ class _CartPageState extends State<CartPage> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text('My Cart', style: TextStyle(color: Colors.black)),
+        title: const Text('Panier', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.white,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
@@ -81,9 +81,9 @@ class _CartPageState extends State<CartPage> {
         const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Stopping Cart', style: TextStyle(fontSize: 12)),
-            Text('Checkout Details', style: TextStyle(fontSize: 12)),
-            Text('Payment', style: TextStyle(fontSize: 12)),
+            Text('Panier', style: TextStyle(fontSize: 12)),
+            Text(' Details', style: TextStyle(fontSize: 12)),
+            Text('Paiement', style: TextStyle(fontSize: 12)),
           ],
         ),
       ],
@@ -228,7 +228,7 @@ class _CartPageState extends State<CartPage> {
           child: OutlinedButton.icon(
             onPressed: () => Navigator.pop(context),
             icon: const Icon(Icons.arrow_back, color: Colors.blue),
-            label: const Text('Return to Shop',
+            label: const Text('Retour au magasin',
                 style: TextStyle(color: Colors.blue)),
             style: OutlinedButton.styleFrom(
               side: const BorderSide(color: Colors.blue),
@@ -239,13 +239,15 @@ class _CartPageState extends State<CartPage> {
             ),
           ),
         ),
+        const SizedBox(width: 12),
+
         Expanded(
           child: ElevatedButton.icon(
             onPressed: () {
               Navigator.pushNamed(context, checkout);
             },
             icon: const Icon(Icons.arrow_forward, color: Colors.white),
-            label: const Text('Continue to Checkout',
+            label: const Text('Continuer au details',
                 style: TextStyle(color: Colors.white)),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,

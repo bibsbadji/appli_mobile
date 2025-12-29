@@ -38,7 +38,7 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text('Checkout', style: TextStyle(color: Colors.black)),
+        title: const Text('Détails', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.white,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
@@ -58,7 +58,7 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
                 _stepper(),
                 const SizedBox(height: 20),
                 const Text(
-                  'Checkout Details',
+                  ' Informations de livraison',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
@@ -67,47 +67,47 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
                 // Exemple pour tous les champs
                 TextInput(
                   controller: countryCtrl,
-                  labelText: 'Country',
+                  labelText: 'Pays/Région',
                   suffixIcon: const Icon(Icons.keyboard_arrow_down),
                   borderColor: Colors.blue, // <- couleur personnalisée
                 ),
                 const SizedBox(height: 12),
                 TextInput(
                   controller: firstNameCtrl,
-                  labelText: 'First name',
+                  labelText: 'Prénom',
                   validator: _required,
                   borderColor: Colors.blue, // <- ici aussi
                 ),
                 const SizedBox(height: 12),
                 TextInput(
                   controller: lastNameCtrl,
-                  labelText: 'Last name',
+                  labelText: 'Nom',
                   validator: _required,
                   borderColor: Colors.blue,
                 ),
                 const SizedBox(height: 12),
                 TextInput(
                   controller: addressCtrl,
-                  labelText: 'Address',
+                  labelText: 'Adresse',
                   validator: _required,
                   borderColor: Colors.blue,
                 ),
                 const SizedBox(height: 12),
                 TextInput(
                   controller: cityCtrl,
-                  labelText: 'City',
+                  labelText: 'Ville',
                   validator: _required,
                   borderColor: Colors.blue,
                 ),
                 const SizedBox(height: 12),
                 TextInput(
-                  labelText: 'Postal code',
+                  labelText: 'Code postal',
                   borderColor: Colors.blue,
                 ),
                 const SizedBox(height: 12),
                 TextInput(
                   controller: phoneCtrl,
-                  labelText: 'Phone',
+                  labelText: 'Numero de téléphone',
 
                   validator: _required,
                   borderColor: Colors.blue,
@@ -125,7 +125,7 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
                       onChanged: (v) => setState(() => saveInfo = v ?? false),
                     ),
                     const Expanded(
-                      child: Text('Save this information for next time'),
+                      child: Text('Enregistrer ces informations pour la prochaine fois'),
                     ),
                   ],
                 ),
@@ -138,7 +138,7 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
                       child: OutlinedButton.icon(
                         onPressed: () => Navigator.pop(context),
                         icon: const Icon(Icons.arrow_back, color: Colors.blue),
-                        label: const Text('Return to Cart', style: TextStyle(color: Colors.blue)),
+                        label: const Text('Retour au panier', style: TextStyle(color: Colors.blue)),
                         style: OutlinedButton.styleFrom(
                           side: const BorderSide(color: Colors.blue),
                           padding: const EdgeInsets.symmetric(vertical: 14),
@@ -155,7 +155,7 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
                           }
                         },
                         icon: const Icon(Icons.arrow_forward, color: Colors.white),
-                        label: const Text('Continue to Payment', style: TextStyle(color: Colors.white)),
+                        label: const Text('Continuer au paiement', style: TextStyle(color: Colors.white)),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue,
                           padding: const EdgeInsets.symmetric(vertical: 14),
@@ -176,7 +176,7 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
   // ================= HELPERS =================
   static String? _required(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'This field is required';
+      return 'Ce champ est requis';
     }
     return null;
   }
@@ -198,9 +198,9 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
         const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Shopping Cart', style: TextStyle(fontSize: 12)),
-            Text('Checkout Details', style: TextStyle(fontSize: 12)),
-            Text('Payment', style: TextStyle(fontSize: 12)),
+            Text('Panier', style: TextStyle(fontSize: 12)),
+            Text(' Details', style: TextStyle(fontSize: 12)),
+            Text('Paiement', style: TextStyle(fontSize: 12)),
           ],
         ),
       ],

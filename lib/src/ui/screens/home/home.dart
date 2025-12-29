@@ -286,7 +286,7 @@ class _HomeState extends State<Home> {
     return FloatingActionButton.extended(
       backgroundColor: Colors.blue,
       icon: const Icon(Icons.chat_bubble_outline, color: Colors.white),
-      label: const Text('Ask Now', style: TextStyle(color: Colors.white),),
+      label: const Text('Question?', style: TextStyle(color: Colors.white),),
       onPressed: () {},
     );
   }
