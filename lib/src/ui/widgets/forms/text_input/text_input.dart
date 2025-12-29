@@ -15,6 +15,7 @@ class TextInput extends StatefulWidget {
     this.errorText,
     this.initialValue,
     this.borderRadius,
+    this.borderColor, // nouvelle propriété
   }) : super(key: key);
 
   final TextEditingController? controller;
@@ -29,6 +30,7 @@ class TextInput extends StatefulWidget {
   final String? errorText;
   final String? initialValue;
   final BorderRadius? borderRadius;
+  final Color? borderColor; // couleur personnalisée
 
   @override
   State<TextInput> createState() => _TextInputState();
@@ -45,6 +47,8 @@ class _TextInputState extends State<TextInput> {
 
   @override
   Widget build(BuildContext context) {
+    final Color borderClr = widget.borderColor ?? Theme.of(context).primaryColor;
+
     return SizedBox(
       width: double.infinity,
       child: TextFormField(
@@ -56,36 +60,30 @@ class _TextInputState extends State<TextInput> {
         decoration: InputDecoration(
           labelText: widget.labelText,
           errorText: widget.errorText,
-          
-          // Icône à gauche
-          prefixIcon: widget.prefixIcon ?? 
-              (widget.iconData != null ? Icon(widget.iconData) : null),
-          
-          // Icône à droite (avec toggle pour mot de passe)
+
+          prefixIcon: widget.prefixIcon ?? (widget.iconData != null ? Icon(widget.iconData) : null),
+
           suffixIcon: widget.ispassword
               ? IconButton(
-                  icon: Icon(
-                    _obscureText ? Icons.visibility_off : Icons.visibility,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _obscureText = !_obscureText;
-                    });
-                  },
-                )
+            icon: Icon(_obscureText ? Icons.visibility_off : Icons.visibility),
+            onPressed: () {
+              setState(() {
+                _obscureText = !_obscureText;
+              });
+            },
+          )
               : widget.suffixIcon,
-          
-          // Border avec borderRadius personnalisé
+
           border: OutlineInputBorder(
             borderRadius: widget.borderRadius ?? BorderRadius.circular(8),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: widget.borderRadius ?? BorderRadius.circular(8),
-            borderSide: BorderSide(color: Colors.grey.shade300),
+            borderSide: BorderSide(color: borderClr, width: 1),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: widget.borderRadius ?? BorderRadius.circular(8),
-            borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 2),
+            borderSide: BorderSide(color: borderClr, width: 2),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: widget.borderRadius ?? BorderRadius.circular(8),
@@ -95,8 +93,7 @@ class _TextInputState extends State<TextInput> {
             borderRadius: widget.borderRadius ?? BorderRadius.circular(8),
             borderSide: const BorderSide(color: Colors.red, width: 2),
           ),
-          
-          // Padding intérieur
+
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         ),
       ),

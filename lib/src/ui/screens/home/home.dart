@@ -1,8 +1,6 @@
 // ignore_for_file: unused_import
 
 import 'package:cours1/src/ui/routes/route_path.dart';
-import 'package:cours1/src/ui/screens/login/login.dart';
-import 'package:cours1/src/ui/screens/supply/supply.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -25,7 +23,7 @@ class _HomeState extends State<Home> {
   int _currentCarouselIndex = 0;
   int _selectedTabIndex = 0;
 
-  final List<String> tabs = ['Tous', 'Produits', 'Categorie', 'Promotions'];
+  final List<String> tabs = ['Tous', 'Produits', 'Catégorie', 'Promotions'];
 
   final List<String> carouselImages = [
     'assets/images/promo1.jpg',
@@ -59,7 +57,6 @@ class _HomeState extends State<Home> {
                     const SizedBox(height: 30),
                     _buildMainMenu(),
                     const SizedBox(height: 20),
-            
                   ],
                 ),
               ),
@@ -78,7 +75,7 @@ class _HomeState extends State<Home> {
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
-            decoration: BoxDecoration(color: Colors.blue),
+            decoration: BoxDecoration(color: Colors.blue.shade600),
             currentAccountPicture: const CircleAvatar(
               backgroundColor: Colors.white,
               child: Icon(Icons.person, size: 50, color: Colors.blue),
@@ -87,12 +84,12 @@ class _HomeState extends State<Home> {
             accountEmail: Text(widget.userEmail),
           ),
           _drawerItem(Icons.home, 'Accueil', () => Navigator.pop(context)),
-          _drawerItem(Icons.favorite, 'Favorie', () => Navigator.pop(context)),
-          _drawerItem(Icons.shopping_cart, 'card',() => Navigator.pop(context) ),
+          _drawerItem(Icons.favorite, 'Favoris', () => Navigator.pop(context)),
+          _drawerItem(Icons.shopping_cart, 'Panier', () => Navigator.pop(context)),
           _drawerItem(Icons.person, 'Profil', () => Navigator.pop(context)),
           const Divider(),
           _drawerItem(Icons.logout, 'Déconnexion', _showLogoutDialog,
-              color: Colors.blue),
+              color: Colors.blue.shade600),
         ],
       ),
     );
@@ -101,7 +98,7 @@ class _HomeState extends State<Home> {
   Widget _drawerItem(IconData icon, String title, VoidCallback onTap,
       {Color? color}) {
     return ListTile(
-      leading: Icon(icon, color: color ?? Colors.blue),
+      leading: Icon(icon, color: color ?? Colors.blue.shade600),
       title: Text(title, style: TextStyle(color: color ?? Colors.black)),
       onTap: onTap,
     );
@@ -121,19 +118,11 @@ class _HomeState extends State<Home> {
           ),
           const Text('Accueil',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-  
           IconButton(
             icon: const Icon(Icons.notifications, color: Colors.blue),
-            onPressed: () {
-
-            },
+            onPressed: () {},
           ),
-         
         ],
-          
-
-          
-        
       ),
     );
   }
@@ -144,7 +133,7 @@ class _HomeState extends State<Home> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: TextField(
         decoration: InputDecoration(
-          hintText: 'Search',
+          hintText: 'Rechercher',
           prefixIcon: const Icon(Icons.search),
           filled: true,
           fillColor: Colors.grey[100],
@@ -171,20 +160,20 @@ class _HomeState extends State<Home> {
             onTap: () => setState(() => _selectedTabIndex = i),
             child: Container(
               margin: const EdgeInsets.only(right: 12),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
               decoration: BoxDecoration(
                 color: selected ? Colors.blue[50] : Colors.white,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                    color: selected ? Colors.blue : Colors.grey[300]!),
+                  color: selected ? Colors.blue.shade600 : Colors.grey[300]!,
+                ),
               ),
               child: Text(
                 tabs[i],
                 style: TextStyle(
-                    color: selected ? Colors.blue : Colors.grey[700],
-                    fontWeight:
-                        selected ? FontWeight.bold : FontWeight.normal),
+                  color: selected ? Colors.blue.shade800 : Colors.grey[700],
+                  fontWeight: selected ? FontWeight.bold : FontWeight.normal,
+                ),
               ),
             ),
           );
@@ -199,9 +188,7 @@ class _HomeState extends State<Home> {
       height: 200,
       child: PageView.builder(
         itemCount: carouselImages.length,
-        onPageChanged: (index) {
-          setState(() => _currentCarouselIndex = index);
-        },
+        onPageChanged: (index) => setState(() => _currentCarouselIndex = index),
         itemBuilder: (context, index) {
           return Container(
             margin: const EdgeInsets.symmetric(horizontal: 10),
@@ -222,7 +209,8 @@ class _HomeState extends State<Home> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: carouselImages.asMap().entries.map((e) {
-        return Container( 
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
           width: _currentCarouselIndex == e.key ? 24 : 8,
           height: 8,
           margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -237,83 +225,60 @@ class _HomeState extends State<Home> {
     );
   }
 
-  // ================= MENU =================
- Widget _buildMainMenu() {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: Row(
-      children: [
-        _menuItem(
-          Icons.local_shipping,
-          'Supply',
-          () {
-            Navigator.pushNamed(context, supply); // route Produits
-          },
-        ),
-        const SizedBox(width: 12),
-        _menuItem(
-          Icons.inventory_2,
-          'Inventory',
-          () {
-            // Navigator.pushNamed(context, products);
-          },
-        ),
-        const SizedBox(width: 12),
-        _menuItem(
-          Icons.point_of_sale,
-          'Cahier',
-          () {
-            // Navigator.pushNamed(context, products);
-          },
-        ),
-      ],
-    ),
-  );
-}
+  // ================= MAIN MENU =================
+  Widget _buildMainMenu() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        children: [
+          _menuItem(Icons.local_shipping, Colors.blue.shade600, 'Supply', () {
+            Navigator.pushNamed(context, supply);
+          }),
+          const SizedBox(width: 12),
+          _menuItem(Icons.inventory_2, Colors.blue.shade600, 'Inventory', () {}),
+          const SizedBox(width: 12),
+          _menuItem(Icons.point_of_sale, Colors.blue.shade600, 'Cahier', () {}),
+        ],
+      ),
+    );
+  }
 
-
- Widget _menuItem(
-  IconData icon,
-  String label,
-  VoidCallback onTap,
-) {
-  return Expanded(
-    child: InkWell(
-      borderRadius: BorderRadius.circular(16),
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              blurRadius: 4,
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Icon(icon, size: 28, color: Colors.blue),
-            const SizedBox(height: 8),
-            Text(label),
-          ],
+  Widget _menuItem(IconData icon, Color color, String label, VoidCallback onTap) {
+    return Expanded(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                blurRadius: 6,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              Icon(icon, size: 28, color: color),
+              const SizedBox(height: 8),
+              Text(label, style: TextStyle(color: Colors.grey[800])),
+            ],
+          ),
         ),
       ),
-    ),
-  );
-}
-
-
-
+    );
+  }
 
   // ================= CHAT =================
   Widget _buildChatButton() {
     return FloatingActionButton.extended(
       backgroundColor: Colors.blue,
-      icon: const Icon(Icons.chat_bubble_outline),
-      label: const Text('Ask Now'),
+      icon: const Icon(Icons.chat_bubble_outline, color: Colors.white),
+      label: const Text('Ask Now', style: TextStyle(color: Colors.white),),
       onPressed: () {},
     );
   }
@@ -327,15 +292,21 @@ class _HomeState extends State<Home> {
         content: const Text('Voulez-vous vous déconnecter ?'),
         actions: [
           TextButton(
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.blue,
+            ),
             onPressed: () => Navigator.pop(context),
             child: const Text('Annuler'),
           ),
           ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+            ),
             onPressed: () {
               Navigator.pop(context);
               Navigator.pushReplacementNamed(context, '/login');
             },
-            child: const Text('Déconnexion'),
+            child: const Text('Déconnexion', style: TextStyle(color: Colors.white),),
           ),
         ],
       ),

@@ -18,7 +18,6 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
   final lastNameCtrl = TextEditingController();
   final addressCtrl = TextEditingController();
   final cityCtrl = TextEditingController();
-  final postalCtrl = TextEditingController();
   final phoneCtrl = TextEditingController();
 
   bool saveInfo = false;
@@ -30,7 +29,6 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
     lastNameCtrl.dispose();
     addressCtrl.dispose();
     cityCtrl.dispose();
-    postalCtrl.dispose();
     phoneCtrl.dispose();
     super.dispose();
   }
@@ -38,10 +36,9 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text('My Cart', style: TextStyle(color: Colors.black)),
+        title: const Text('Checkout', style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.white,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
@@ -50,7 +47,6 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
           child: Container(height: 2, color: Colors.blue),
         ),
       ),
-
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -60,93 +56,93 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _stepper(),
-
                 const SizedBox(height: 20),
-
                 const Text(
                   'Checkout Details',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-
                 const SizedBox(height: 16),
 
+                // === Champs du formulaire ===
+                // Exemple pour tous les champs
                 TextInput(
                   controller: countryCtrl,
                   labelText: 'Country',
                   suffixIcon: const Icon(Icons.keyboard_arrow_down),
-                  enabled: false,
+                  borderColor: Colors.blue, // <- couleur personnalisée
                 ),
-
                 const SizedBox(height: 12),
                 TextInput(
                   controller: firstNameCtrl,
                   labelText: 'First name',
                   validator: _required,
+                  borderColor: Colors.blue, // <- ici aussi
                 ),
-
                 const SizedBox(height: 12),
                 TextInput(
                   controller: lastNameCtrl,
                   labelText: 'Last name',
                   validator: _required,
+                  borderColor: Colors.blue,
                 ),
-
                 const SizedBox(height: 12),
                 TextInput(
                   controller: addressCtrl,
                   labelText: 'Address',
                   validator: _required,
+                  borderColor: Colors.blue,
                 ),
-
                 const SizedBox(height: 12),
                 TextInput(
                   controller: cityCtrl,
                   labelText: 'City',
                   validator: _required,
+                  borderColor: Colors.blue,
                 ),
-
                 const SizedBox(height: 12),
                 TextInput(
-                  controller: postalCtrl,
                   labelText: 'Postal code',
-                  validator: _required,
+                  borderColor: Colors.blue,
                 ),
-
                 const SizedBox(height: 12),
                 TextInput(
                   controller: phoneCtrl,
                   labelText: 'Phone',
-                  suffixIcon: const Icon(Icons.help_outline),
+
                   validator: _required,
+                  borderColor: Colors.blue,
                 ),
+                const SizedBox(height: 20),
 
-                const SizedBox(height: 8),
 
+
+                // === Checkbox sauvegarde info ===
                 Row(
                   children: [
                     Checkbox(
                       value: saveInfo,
-                      onChanged: (v) {
-                        setState(() => saveInfo = v ?? false);
-                      },
+                      activeColor: Colors.blue,
+                      onChanged: (v) => setState(() => saveInfo = v ?? false),
                     ),
                     const Expanded(
                       child: Text('Save this information for next time'),
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 24),
 
+                // === Boutons navigation ===
                 Row(
                   children: [
                     Expanded(
                       child: OutlinedButton.icon(
                         onPressed: () => Navigator.pop(context),
                         icon: const Icon(Icons.arrow_back, color: Colors.blue),
-                        label: const Text(
-                          'Return to Cart',
-                          style: TextStyle(color: Colors.blue),
+                        label: const Text('Return to Cart', style: TextStyle(color: Colors.blue)),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: Colors.blue),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         ),
                       ),
                     ),
@@ -158,10 +154,12 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
                             Navigator.pushNamed(context, payment);
                           }
                         },
-                        icon: const Icon(Icons.arrow_forward),
-                        label: const Text('Continue to Payment'),
+                        icon: const Icon(Icons.arrow_forward, color: Colors.white),
+                        label: const Text('Continue to Payment', style: TextStyle(color: Colors.white)),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         ),
                       ),
                     ),
@@ -172,26 +170,18 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
           ),
         ),
       ),
-
     );
   }
 
   // ================= HELPERS =================
-
-  String? _required(String? value) {
+  static String? _required(String? value) {
     if (value == null || value.trim().isEmpty) {
       return 'This field is required';
     }
     return null;
   }
 
-  void _submit() {
-    if (_formKey.currentState!.validate()) {
-      // Ici plus tard → PaymentPage
-      debugPrint('Form validé');
-    }
-  }
-
+  // ================= STEPPER =================
   Widget _stepper() {
     return Column(
       children: [
@@ -220,8 +210,7 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
   Widget _circle({bool active = false, bool done = false}) {
     return CircleAvatar(
       radius: 10,
-      backgroundColor:
-      active || done ? Colors.blue : Colors.grey.shade300,
+      backgroundColor: active || done ? Colors.blue : Colors.grey.shade300,
       child: done
           ? const Icon(Icons.check, size: 12, color: Colors.white)
           : active
