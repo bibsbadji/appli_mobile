@@ -92,11 +92,16 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+
       appBar: AppBar(
-        title: const Text("Connexion"),
+        backgroundColor: Colors.blue,
+        title: const Text("Connexion", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
         centerTitle: true,
       ),
-      body: Padding(
+      body:
+
+      Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
@@ -117,6 +122,7 @@ class _LoginState extends State<Login> {
                 const Text(
                   'Connectez-vous à votre compte',
                   style: TextStyle(
+                    color: Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                   ),
@@ -129,6 +135,7 @@ class _LoginState extends State<Login> {
                   labelText: 'Email',
                   iconData: Icons.email,
                   controller: _emailController,
+                  borderColor: Colors.blue,
                   borderRadius: BorderRadius.circular(14),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -141,12 +148,13 @@ class _LoginState extends State<Login> {
                   },
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(height: 30),
 
                 // Champ Mot de passe
                 TextInput(
                   labelText: 'Mot de passe',
                   ispassword: true,
+                  borderColor: Colors.blue,
                   iconData: Icons.lock,
                   controller: _passwordController,
                   borderRadius: BorderRadius.circular(14),
@@ -170,7 +178,7 @@ class _LoginState extends State<Login> {
                     onPressed: () {
                       _showForgotPasswordDialog();
                     },
-                    child: const Text('Mot de passe oublié ?'),
+                    child: const Text('Mot de passe oublié ?', style: TextStyle(color: Colors.blue,),)
                   ),
                 ),
 
@@ -178,7 +186,9 @@ class _LoginState extends State<Login> {
 
                 // Bouton de connexion
                 _isLoading
-                    ? const CircularProgressIndicator()
+                    ? const CircularProgressIndicator(
+                  color: Colors.blue,
+                )
                     : AppButton(
                   onPressed: _login,
                   bgColor: Colors.blue,
@@ -191,12 +201,12 @@ class _LoginState extends State<Login> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("Pas encore de compte ? "),
+                    const Text("Pas encore de compte ? ", style: TextStyle(color: Colors.black),),
                     TextButton(
                       onPressed: () {
                         _showRegisterDialog();
                       },
-                      child: const Text('Inscrivez-vous'),
+                      child: const Text('Inscrivez-vous', style: TextStyle(color: Colors.blue,)),
                     ),
                   ],
                 ),

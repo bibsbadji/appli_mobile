@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cours1/src/utiles/my_assets/images_assets.dart';
-import 'package:cours1/src/ui/screens/supply/cart_page.dart';
+import 'cart_page.dart';
 import '../../widgets/forms/product_card/product_card.dart';
 
 /// =====================
-/// MODELS (DANS LE MEME FICHIER)
+/// MODELS
 /// =====================
 
 class Product {
@@ -58,27 +58,19 @@ class Supply extends StatefulWidget {
 class _SupplyState extends State<Supply> {
   int _selectedIndex = 0;
 
-  /// Produits
   final List<Product> products = [
     Product(name: 'NESCOFFE', image: ImagesAssets.coffe, price: 200),
     Product(name: 'M&MS', image: ImagesAssets.mms, price: 200),
     Product(name: 'PRINGELS', image: ImagesAssets.pringels, price: 200),
     Product(name: 'CHOCOLATE', image: ImagesAssets.chocolate, price: 200),
     Product(name: 'OREO', image: ImagesAssets.oreo, price: 200),
-    Product(
-        name: 'STRAWBERRY JUICE',
-        image: ImagesAssets.strawberry,
-        price: 200),
+    Product(name: 'STRAWBERRY JUICE', image: ImagesAssets.strawberry, price: 200),
     Product(name: 'NUTELLA', image: ImagesAssets.nutella, price: 200),
     Product(name: 'FANTA', image: ImagesAssets.fanta, price: 200),
   ];
 
-  /// Nombre total d’articles dans le panier (badge)
   int get cartItemCount {
-    return CartData.items.fold(
-      0,
-          (sum, item) => sum + item.quantity,
-    );
+    return CartData.items.fold(0, (sum, item) => sum + item.quantity);
   }
 
   void _onItemTapped(int index) {
@@ -91,9 +83,33 @@ class _SupplyState extends State<Supply> {
         context,
         MaterialPageRoute(builder: (_) => const CartPage()),
       ).then((_) {
-        setState(() {}); // rafraîchir le badge au retour
+        setState(() {});
       });
     }
+  }
+
+  /// ================= SHOW SNACKBAR =================
+  void _showAddToCartAlert(String productName) {
+    final snackBar = SnackBar(
+      behavior: SnackBarBehavior.floating,
+      margin: const EdgeInsets.all(16),
+      backgroundColor: Colors.blue,
+      duration: const Duration(seconds: 2),
+      content: Row(
+        children: [
+          const Icon(Icons.check_circle_outline, color: Colors.white),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              '$productName added to cart',
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override
@@ -119,17 +135,13 @@ class _SupplyState extends State<Supply> {
                   });
                 },
               ),
-
               if (cartItemCount > 0)
                 Positioned(
                   right: 6,
                   top: 6,
                   child: Container(
                     padding: const EdgeInsets.all(4),
-                    constraints: const BoxConstraints(
-                      minWidth: 18,
-                      minHeight: 18,
-                    ),
+                    constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
                     decoration: const BoxDecoration(
                       color: Colors.blue,
                       shape: BoxShape.circle,
@@ -147,7 +159,6 @@ class _SupplyState extends State<Supply> {
                 ),
             ],
           ),
-
           IconButton(
             icon: const Icon(Icons.person_outline),
             onPressed: () {},
@@ -176,6 +187,7 @@ class _SupplyState extends State<Supply> {
                 setState(() {
                   CartData.addToCart(products[index]);
                 });
+                _showAddToCartAlert(products[index].name);
               },
             );
           },
@@ -190,14 +202,10 @@ class _SupplyState extends State<Supply> {
         type: BottomNavigationBarType.fixed,
         onTap: _onItemTapped,
         items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined), label: 'Home'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.favorite_border), label: 'Favorites'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart_outlined), label: 'Cart'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline), label: 'Profile'),
+          BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: 'Favorites'),
+          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart_outlined), label: 'Cart'),
+          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Profile'),
         ],
       ),
     );

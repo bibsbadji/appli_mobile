@@ -15,35 +15,28 @@ class _CartPageState extends State<CartPage> {
     final cartItems = CartData.items;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: const Text('My Cart', style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.white,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
-        actions: const [
-          Icon(Icons.shopping_cart_outlined),
-          SizedBox(width: 12),
-          Icon(Icons.person_outline),
-          SizedBox(width: 12),
-        ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(2),
           child: Container(height: 2, color: Colors.blue),
         ),
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             _stepper(),
-
             const SizedBox(height: 16),
-
             Expanded(
               child: cartItems.isEmpty
-                  ? const Center(child: Text('Your cart is empty'))
+                  ? const Center(
+                  child: Text('Your cart is empty',
+                      style: TextStyle(fontSize: 16)))
                   : ListView.builder(
                 itemCount: cartItems.length,
                 itemBuilder: (context, index) {
@@ -52,11 +45,9 @@ class _CartPageState extends State<CartPage> {
                 },
               ),
             ),
-
-            _totalSection(),
-
             const SizedBox(height: 16),
-
+            _totalSection(),
+            const SizedBox(height: 16),
             _bottomButtons(context),
           ],
         ),
@@ -81,7 +72,7 @@ class _CartPageState extends State<CartPage> {
         const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Shopping Cart', style: TextStyle(fontSize: 12)),
+            Text('Stopping Cart', style: TextStyle(fontSize: 12)),
             Text('Checkout Details', style: TextStyle(fontSize: 12)),
             Text('Payment', style: TextStyle(fontSize: 12)),
           ],
@@ -112,35 +103,49 @@ class _CartPageState extends State<CartPage> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade300),
-        borderRadius: BorderRadius.circular(10),
+        color: Colors.white,
+        border: Border.all(color: Colors.grey.shade200),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.05),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Row(
         children: [
-          Image.asset(item.product.image, height: 50),
-
+          Container(
+            width: 70,
+            height: 70,
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Image.asset(item.product.image, fit: BoxFit.contain),
+          ),
           const SizedBox(width: 12),
-
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(item.product.name,
-                    style: const TextStyle(fontWeight: FontWeight.w600)),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w600, fontSize: 14)),
                 const SizedBox(height: 4),
                 Text(
                   '${item.product.price} CFA',
                   style: const TextStyle(
-                    color: Colors.blue,
-                    fontWeight: FontWeight.bold,
-                  ),
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14),
                 ),
               ],
             ),
           ),
-
           _quantityControl(item),
-
           IconButton(
             icon: const Icon(Icons.delete_outline, color: Colors.blue),
             onPressed: () {
@@ -163,18 +168,20 @@ class _CartPageState extends State<CartPage> {
       child: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.remove, size: 16),
+            icon: const Icon(Icons.remove, size: 18),
             onPressed: () {
               setState(() {
-                if (item.quantity > 1) {
-                  item.quantity--;
-                }
+                if (item.quantity > 1) item.quantity--;
               });
             },
           ),
-          Text(item.quantity.toString()),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 6),
+            child: Text(item.quantity.toString(),
+                style: const TextStyle(fontWeight: FontWeight.w600)),
+          ),
           IconButton(
-            icon: const Icon(Icons.add, size: 16),
+            icon: const Icon(Icons.add, size: 18),
             onPressed: () {
               setState(() {
                 item.quantity++;
@@ -194,16 +201,14 @@ class _CartPageState extends State<CartPage> {
     );
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text('Total:', style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
+        const Text('Total :',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
         Text(
           '$total CFA',
           style: const TextStyle(
-            fontSize: 18,
-            color: Colors.blue,
-            fontWeight: FontWeight.bold,
-          ),
+              fontSize: 18, color: Colors.blue, fontWeight: FontWeight.bold),
         ),
       ],
     );
@@ -219,11 +224,13 @@ class _CartPageState extends State<CartPage> {
               Navigator.pop(context);
             },
             icon: const Icon(Icons.arrow_back, color: Colors.blue),
-            label: const Text('Continue Shopping',
+            label: const Text('Return to Shop',
                 style: TextStyle(color: Colors.blue)),
             style: OutlinedButton.styleFrom(
               side: const BorderSide(color: Colors.blue),
               padding: const EdgeInsets.symmetric(vertical: 14),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
             ),
           ),
         ),
@@ -234,10 +241,13 @@ class _CartPageState extends State<CartPage> {
               Navigator.pushNamed(context, checkout);
             },
             icon: const Icon(Icons.arrow_forward, color: Colors.white),
-            label: const Text('Continue to Checkout',style: TextStyle(color: Colors.white),),
+            label: const Text('Continue to Checkout',
+                style: TextStyle(color: Colors.white)),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,
               padding: const EdgeInsets.symmetric(vertical: 14),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
             ),
           ),
         ),

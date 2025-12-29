@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen>
     _controller.forward(); // démarre l'animation
 
     // Redirection après 2 secondes
-    Timer(const Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 4), () {
       Navigator.pushReplacementNamed(context, login);
     });
   }
@@ -46,35 +46,43 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.white, // même couleur que le login
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-            ),
-            const SizedBox(height: 20),
+
+            // Logo dans un cercle avec animation
             ScaleTransition(
               scale: _animation,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.asset(
-                  ImagesAssets.logo,
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.cover,
+              child: CircleAvatar(
+                radius: 50, // taille du logo
+                backgroundColor: Colors.white.withOpacity(0.1), // fond léger
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.asset(
+                    ImagesAssets.logo,
+                    fit: BoxFit.contain,
+                    height: 100,
+                    width: 100,
+                  ),
                 ),
               ),
             ),
             const SizedBox(height: 10),
+
+            // Texte de chargement
             const Text(
-              "Chargement...",
+              "Loading...",
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 15,
                 fontWeight: FontWeight.w600,
-                color: Colors.white,
+                color: Colors.blue,
               ),
+            ),
+            const SizedBox(height: 15),
+            const CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
             ),
           ],
         ),
