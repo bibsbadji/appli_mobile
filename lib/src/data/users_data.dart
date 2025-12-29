@@ -21,7 +21,7 @@ class UsersData {
     User(
       email: 'becayesadio@gmail.com',
       nom: ' becaye SADIO',
-      motDePasse: 'sadio2024',
+      motDePasse: 'sadio2025',
     ),
     User(
       email: 'gueyeelimane@gmail.com',

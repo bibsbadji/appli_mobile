@@ -2,6 +2,7 @@
 
 import 'package:cours1/src/ui/routes/route_path.dart';
 import 'package:cours1/src/ui/screens/login/login.dart';
+import 'package:cours1/src/ui/screens/supply/supply.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -91,7 +92,7 @@ class _HomeState extends State<Home> {
           _drawerItem(Icons.person, 'Profil', () => Navigator.pop(context)),
           const Divider(),
           _drawerItem(Icons.logout, 'Déconnexion', _showLogoutDialog,
-              color: Colors.red),
+              color: Colors.blue),
         ],
       ),
     );
@@ -246,7 +247,7 @@ class _HomeState extends State<Home> {
           Icons.local_shipping,
           'Supply',
           () {
-            // Navigator.pushNamed(context, Supply); // route Produits
+            Navigator.pushNamed(context, supply); // route Produits
           },
         ),
         const SizedBox(width: 12),

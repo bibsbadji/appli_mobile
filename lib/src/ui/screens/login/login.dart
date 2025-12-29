@@ -104,16 +104,18 @@ class _LoginState extends State<Login> {
             child: Column(
               children: [
                 const SizedBox(height: 30),
-                
+
                 // Logo
                 Image.asset(
                   ImagesAssets.logo,
                   width: 120,
                   height: 120,
+          
+                  
                 ),
-                
+
                 const SizedBox(height: 30),
-                
+
                 const Text(
                   'Connectez-vous à votre compte',
                   style: TextStyle(
@@ -121,9 +123,9 @@ class _LoginState extends State<Login> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                
+
                 const SizedBox(height: 30),
-                
+
                 // Champ Email
                 TextInput(
                   labelText: 'Email',
@@ -140,9 +142,9 @@ class _LoginState extends State<Login> {
                     return null;
                   },
                 ),
-                
+
                 const SizedBox(height: 10),
-                
+
                 // Champ Mot de passe
                 TextInput(
                   labelText: 'Mot de passe',
@@ -160,9 +162,9 @@ class _LoginState extends State<Login> {
                     return null;
                   },
                 ),
-                
+
                 const SizedBox(height: 10),
-                
+
                 // Mot de passe oublié
                 Align(
                   alignment: Alignment.centerRight,
@@ -173,19 +175,20 @@ class _LoginState extends State<Login> {
                     child: const Text('Mot de passe oublié ?'),
                   ),
                 ),
-                
+
                 const SizedBox(height: 20),
-                
+
                 // Bouton de connexion
                 _isLoading
                     ? const CircularProgressIndicator()
                     : AppButton(
-                        onPressed: _login,
-                        text: 'Se connecter',
-                      ),
-                
+                  onPressed: _login,
+                  bgColor: Colors.blue,
+                  text: 'Se connecter',
+                ),
+
                 const SizedBox(height: 20),
-                
+
                 // Lien vers inscription
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -199,11 +202,11 @@ class _LoginState extends State<Login> {
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 30),
-                
+
                 // Afficher les comptes de test
-              
+
               ],
             ),
           ),
@@ -288,10 +291,10 @@ class _LoginState extends State<Login> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Veuillez remplir tous les champs',style: TextStyle(
-                      color: Colors.blue
+                        color: Colors.blue
                     ),),
                     backgroundColor: Colors.orange,
-                    
+
 
                   ),
                 );
@@ -304,7 +307,7 @@ class _LoginState extends State<Login> {
                     content: Text('Email invalide'),
                     backgroundColor: Colors.red,
                   ),
-                  
+
                 );
                 return;
               }
