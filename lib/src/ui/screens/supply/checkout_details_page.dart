@@ -18,7 +18,6 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
   final lastNameCtrl = TextEditingController();
   final addressCtrl = TextEditingController();
   final cityCtrl = TextEditingController();
-  final postalCtrl = TextEditingController();
   final phoneCtrl = TextEditingController();
 
   bool saveInfo = false;
@@ -30,7 +29,6 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
     lastNameCtrl.dispose();
     addressCtrl.dispose();
     cityCtrl.dispose();
-    postalCtrl.dispose();
     phoneCtrl.dispose();
     super.dispose();
   }
@@ -107,7 +105,6 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
 
                 const SizedBox(height: 12),
                 TextInput(
-                  controller: postalCtrl,
                   labelText: 'Postal code',
                   validator: _required,
                 ),
@@ -142,11 +139,15 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
                   children: [
                     Expanded(
                       child: OutlinedButton.icon(
-                        onPressed: () => Navigator.pop(context),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
                         icon: const Icon(Icons.arrow_back, color: Colors.blue),
-                        label: const Text(
-                          'Return to Cart',
-                          style: TextStyle(color: Colors.blue),
+                        label: const Text('Return to Cart',
+                            style: TextStyle(color: Colors.blue)),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: Colors.blue),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
                         ),
                       ),
                     ),
@@ -154,14 +155,13 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            Navigator.pushNamed(context, payment);
-                          }
+                          Navigator.pushNamed(context, checkout);
                         },
-                        icon: const Icon(Icons.arrow_forward),
-                        label: const Text('Continue to Payment'),
+                        icon: const Icon(Icons.arrow_forward, color: Colors.white),
+                        label: const Text('Continue to Payment',style: TextStyle(color: Colors.white),),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
                         ),
                       ),
                     ),
