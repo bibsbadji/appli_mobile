@@ -41,6 +41,7 @@ class _PaymentPageState extends State<PaymentPage> {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
+
             _paymentMethod(
               icon: Icons.money,
               title: 'Cash',
@@ -59,6 +60,7 @@ class _PaymentPageState extends State<PaymentPage> {
               subtitle: 'Wave, Orange Money',
               value: PaymentMethod.mobile,
             ),
+
             const SizedBox(height: 16),
 
             // Formulaire carte bancaire
@@ -101,11 +103,11 @@ class _PaymentPageState extends State<PaymentPage> {
 
             const SizedBox(height: 24),
 
-            _summaryCard(), // résumé de commande après paiement
+            _summaryCard(), // résumé de commande
 
             const Spacer(),
 
-            // Boutons retour + payer
+            // Boutons Retour + Checkout
             Row(
               children: [
                 Expanded(
@@ -115,12 +117,22 @@ class _PaymentPageState extends State<PaymentPage> {
                     label: const Text('Return to Cart'),
                   ),
                 ),
-
+                const SizedBox(width: 12),
                 Expanded(
-                  child: OutlinedButton.icon(
-                    onPressed: _onPay,
+                  child: ElevatedButton.icon(
+                    onPressed: _validateAndPay,
                     icon: const Icon(Icons.arrow_forward),
-                    label: const Text('Checkout'),
+                    label: const Text(
+                      'Checkout',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                    ),
                   ),
                 ),
               ],
@@ -131,6 +143,7 @@ class _PaymentPageState extends State<PaymentPage> {
     );
   }
 
+  // ================= GET TOTAL =================
   int get total {
     return CartData.items.fold(
       0,
@@ -138,6 +151,7 @@ class _PaymentPageState extends State<PaymentPage> {
     );
   }
 
+  // ================= APPBAR =================
   AppBar _appBar() => AppBar(
     title: const Text(
       'Checkout',
@@ -152,6 +166,7 @@ class _PaymentPageState extends State<PaymentPage> {
     ),
   );
 
+  // ================= SUMMARY CARD =================
   Widget _summaryCard() {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -176,6 +191,7 @@ class _PaymentPageState extends State<PaymentPage> {
     );
   }
 
+  // ================= PAYMENT METHOD =================
   Widget _paymentMethod({
     required IconData icon,
     required String title,
@@ -227,21 +243,56 @@ class _PaymentPageState extends State<PaymentPage> {
     );
   }
 
-  void _onPay() {
-    if (selectedMethod == PaymentMethod.card &&
-        !_cardFormKey.currentState!.validate()) {
+  // ================= VALIDATION & PAIEMENT =================
+  void _validateAndPay() {
+    if (selectedMethod == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Veuillez sélectionner une méthode de paiement'),
+        ),
+      );
       return;
     }
 
-    debugPrint('Total à payer: $total FCFA');
+    if (selectedMethod == PaymentMethod.card) {
+      if (!_cardFormKey.currentState!.validate()) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Veuillez remplir correctement les informations de votre carte',
+            ),
+          ),
+        );
+        return;
+      }
+    }
+
+    // Paiement validé
+    debugPrint('Paiement validé ! Total: $total FCFA');
     debugPrint('Méthode: $selectedMethod');
     if (selectedMethod == PaymentMethod.card) {
-      debugPrint('Numéro de carte: ${_cardNumberCtrl.text}');
+      debugPrint('Numéro: ${_cardNumberCtrl.text}');
       debugPrint('Expiration: ${_expiryCtrl.text}');
       debugPrint('CVV: ${_cvvCtrl.text}');
     }
+
+    // Confirmation
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Paiement effectué'),
+        content: Text('Total payé: $total FCFA\nMéthode: $selectedMethod'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 
+  // ================= TEXT FIELD HELPER =================
   Widget _textField(
     TextEditingController ctrl,
     String label,
@@ -266,6 +317,7 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 }
 
+// ================= SUMMARY ROW =================
 class _SummaryRow extends StatelessWidget {
   final String label;
   final String value;
