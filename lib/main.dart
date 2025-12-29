@@ -1,7 +1,5 @@
 import 'package:cours1/src/ui/routes/route.dart';
 import 'package:cours1/src/ui/routes/route_path.dart';
-import 'package:cours1/src/ui/screens/login/login.dart';
-import 'package:cours1/src/ui/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {

@@ -1,6 +1,6 @@
-import 'package:cours1/src/ui/routes/route_path.dart';
 import 'package:flutter/material.dart';
-import 'supply.dart'; // pour Product, CartItem, CartData
+import 'package:cours1/src/ui/routes/route_path.dart';
+import 'supply.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -10,10 +10,17 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  List<CartItem> get cartItems => CartData.items;
+
+  int get totalPrice {
+    return cartItems.fold(
+      0,
+      (sum, item) => sum + item.product.price * item.quantity,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final cartItems = CartData.items;
-
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
@@ -26,6 +33,7 @@ class _CartPageState extends State<CartPage> {
           child: Container(height: 2, color: Colors.blue),
         ),
       ),
+
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -44,6 +52,7 @@ class _CartPageState extends State<CartPage> {
                   return _cartItem(item);
                 },
               ),
+
             ),
             const SizedBox(height: 16),
             _totalSection(),
@@ -189,24 +198,21 @@ class _CartPageState extends State<CartPage> {
             },
           ),
         ],
+
       ),
     );
   }
 
   // ================= TOTAL =================
   Widget _totalSection() {
-    final total = CartData.items.fold(
-      0,
-          (sum, item) => sum + item.product.price * item.quantity,
-    );
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const Text('Total :',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+
         Text(
-          '$total CFA',
+          '$totalPrice CFA',
           style: const TextStyle(
               fontSize: 18, color: Colors.blue, fontWeight: FontWeight.bold),
         ),
@@ -220,9 +226,7 @@ class _CartPageState extends State<CartPage> {
       children: [
         Expanded(
           child: OutlinedButton.icon(
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            onPressed: () => Navigator.pop(context),
             icon: const Icon(Icons.arrow_back, color: Colors.blue),
             label: const Text('Return to Shop',
                 style: TextStyle(color: Colors.blue)),
@@ -231,10 +235,10 @@ class _CartPageState extends State<CartPage> {
               padding: const EdgeInsets.symmetric(vertical: 14),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8)),
+
             ),
           ),
         ),
-        const SizedBox(width: 12),
         Expanded(
           child: ElevatedButton.icon(
             onPressed: () {
@@ -248,6 +252,7 @@ class _CartPageState extends State<CartPage> {
               padding: const EdgeInsets.symmetric(vertical: 14),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8)),
+
             ),
           ),
         ),

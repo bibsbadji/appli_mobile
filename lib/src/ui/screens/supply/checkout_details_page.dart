@@ -181,7 +181,7 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
     return null;
   }
 
-  // ================= STEPPER =================
+
   Widget _stepper() {
     return Column(
       children: [
@@ -220,8 +220,6 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
   }
 
   Widget _line() {
-    return Expanded(
-      child: Container(height: 2, color: Colors.grey.shade300),
-    );
+    return Expanded(child: Container(height: 2, color: Colors.grey.shade300));
   }
 }

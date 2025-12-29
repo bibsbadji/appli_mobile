@@ -63,6 +63,7 @@ class _TextInputState extends State<TextInput> {
 
           prefixIcon: widget.prefixIcon ?? (widget.iconData != null ? Icon(widget.iconData) : null),
 
+
           suffixIcon: widget.ispassword
               ? IconButton(
             icon: Icon(_obscureText ? Icons.visibility_off : Icons.visibility),
@@ -73,6 +74,7 @@ class _TextInputState extends State<TextInput> {
             },
           )
               : widget.suffixIcon,
+
 
           border: OutlineInputBorder(
             borderRadius: widget.borderRadius ?? BorderRadius.circular(8),
@@ -95,6 +97,7 @@ class _TextInputState extends State<TextInput> {
           ),
 
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+
         ),
       ),
     );
