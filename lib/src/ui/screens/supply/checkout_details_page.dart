@@ -39,7 +39,7 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
       backgroundColor: Colors.white,
 
       appBar: AppBar(
-        title: const Text('My Cart', style: TextStyle(color: Colors.black)),
+        title: const Text('Checkout', style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.white,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
@@ -123,6 +123,7 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
                   children: [
                     Checkbox(
                       value: saveInfo,
+                      activeColor: Colors.blue,
                       onChanged: (v) {
                         setState(() => saveInfo = v ?? false);
                       },
@@ -155,7 +156,7 @@ class _CheckoutDetailsPageState extends State<CheckoutDetailsPage> {
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          Navigator.pushNamed(context, checkout);
+                          Navigator.pushNamed(context, payment);
                         },
                         icon: const Icon(Icons.arrow_forward, color: Colors.white),
                         label: const Text('Continue to Payment',style: TextStyle(color: Colors.white),),
